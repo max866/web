@@ -8,6 +8,28 @@
   
 </head>
 <body>
-  <h3>Hello World</h3>
+    測站：<span id="site"></span></br>
+    資料時間：<span id="time"></span></br>
+    現在溫度：<span id="temp"></span> &deg;c</br>
+    <hr>
+    <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script>
+  
+      $.ajax({
+        url: 'https://data.lass-net.org/data/last.php?device_id=74DA38E69D1C',
+        dataType: 'json',
+        success: function (body) {
+          // console.log(data);
+          // 取得的遠端資料
+          let data = body.feeds[0];
+          let d = new Date().toLocaleDateString();
+          let t = new Date().toLocaleTimeString();
+          $("#temp").html(data.AirBox["s_t0"]);
+          $("#time").html(d+' '+t);
+          $("#site").html(data.AirBox["name"]);
+        }
+      });
+      setTimeout(function(){location.reload()},600000); //指定10min刷新一次
+    </script>
 </body>
 </html>
