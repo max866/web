@@ -16,3 +16,13 @@ $.ajax({
     $('#calendar').val(today);
   }
 });
+
+
+function saveValues(){
+  localStorage._getdate = document.getElementById("calendar").value;
+  localStorage._payfor = document.getElementById("payfor").value;
+  localStorage._buy = document.getElementById("buy").value;
+  localStorage._fee = document.getElementById("fee").value;
+  localStorage._content = document.getElementById("content").value;
+  
+}
