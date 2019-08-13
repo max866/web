@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,60 @@
   <title>Jr's Test Web</title>
   <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
   <script src="./getTemperture.js"></script>
+  <script src="./getAccountBookJS.js"></script>
+  <style>
+    #content {
+      width: 250px;
+    };
+  </style>
 </head>
+
 <body>
-    測站：<span id="site"></span></br>
-    資料時間：<span id="time"></span></br>
-    現在溫度：<span id="temp"></span> &deg;c</br>
-    <hr>
+  測站：<span id="site"></span></br>
+  資料時間：<span id="time"></span></br>
+  現在溫度：<span id="temp"></span> &deg;c</br>
+  <hr>
+  <form action="./post2goosheet.js" method="POST" id="googleform">
+    <h2>記帳簿</h2>
+    日期：<input type="date" id="calendar"><br/>
+    支出來源：<select id="payfor" name="payfor">
+        <option vaule="tcb">合作金庫信用卡</option>
+        <option vaule="cash" selected>台幣現金</option>
+        <option vaule="postoffice">郵局</option>
+        <option vaule="esunbank">玉山國旅卡</option>
+        <option vaule="rekuten">樂天信用卡</option>
+        <option vaule="easycard">悠遊卡</option>
+      </select><br/>
+    支出總類：<select id="buy" name="buy">
+      <option value="meal">餐費</option>
+      <option value="sanck" selected>零食宵夜食品</option>
+      <option value="necessy">日用品</option>
+      <option value="3c">3C用品</option>
+      <option value="hydropower">水電瓦斯</option>
+      <option value="traffic">交通</option>
+      <option value="gasoline">加油</option>
+      <option value="telfee">電話通訊費</option>
+      <option value="entertainment">娛樂</option>
+      <option value="maintenance">汽機車維修</option>
+      <option value="edu">教育進修</option>
+      <option value="pet">寵物</option>
+      <option value="insurance">保險</option>
+      <option value="tax">税</option>
+      <option value="medical">醫療健康</option>
+      <option value="invest">投資</option>
+      <option value="gift">禮金</option>
+      <option value="loan">償還貸款</option>
+      <option value="other">其他</option>
+    </select><br/>
+    金額：<input type="number" id="fee" min="0" required><br/>
+    明細：<input type="text" id="content"><br/>
+    <input type="submit" value="送出">
+  </form>
+
 </body>
+
 </html>
+
+
+
+
