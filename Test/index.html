@@ -38,7 +38,7 @@
         var office = [];
         var controller = [];
         var memo = [];
-        $.getJSON('https://spreadsheets.google.com/feeds/list/1OISgS2SCp_UtWzqDEUntXrC22S54Y9LR0RMaIwarE1I/od6/public/values?alt=json', function (data){
+        $.getJSON('https://spreadsheets.google.com/feeds/list/1gEN4KxjSSek2Ho_-Ce6mB36nNwv_lsRoqZ1NlcdllsE/od6/public/values?alt=json', function (data){
             for (var i=0; i < data.feed.entry.length; i++){
                 rackLoc[i] = data.feed.entry[i].gsx$rackLoc.$t;
                 onoffline[i] = data.feed.entry[i].gsx$onoffline.$t;
