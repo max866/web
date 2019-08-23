@@ -24,5 +24,11 @@ function saveValues(){
   localStorage._buy = document.getElementById("buy").value;
   localStorage._fee = document.getElementById("fee").value;
   localStorage._content = document.getElementById("content").value;
-  
+
+  a = {
+  data:localStorage._getdate+','+localStorage._payfor+','+localStorage._buy+','+localStorage._fee+','+localStorage._content,
+  sheetUrl:'https://docs.google.com/spreadsheets/d/1NzHDmTcM5IrTUMEaon16l6hTnDPQebnynZcMb50_aq8/edit?usp=sharing',
+  sheetTag:'expenditure'
+  };
+  $.get('https://script.google.com/macros/s/AKfycbyPPidEYflHk6xvQvuhbXh4zwwGcqlJlxZ6rlQ4s5Lmy-g_HMs/exec',a)
 }
