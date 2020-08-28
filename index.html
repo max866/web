@@ -62,29 +62,39 @@
     <button onclick="saveValues()">寫入Google表單</button>
   </form>
   <hr/>
-
+  
+  <!-- 2020/8/28 測試寫入-->
   <!-- 2019/8/23 在中興大學圖書館測試寫入-->
   <button id="b">TestSave</button>
   <script>
-    $(function () {
-      var $a1 = $('#site'),
-        $a2 = $('#time'),
-        $a3 = $('#temp'),
-        $b = $('#b'),
-        a = {};
+    var appUrl = 'https://script.google.com/macros/s/AKfycbwxxBf4J3xIuWdRAR4zDp_t-DSVjBFvPyxc95NMT9Jx2SA7FLE/exec',
+        sheetsUrl = 'https://docs.google.com/spreadsheets/d/1pxe44BpwusIE8D8YtjvKe8Y8eNuKZ3qH5ZCa7hBHVDs/edit?usp=sharing',
+        sheetName = 'wrTest',
+        type = 'bottom',
+        sendBtn = $('#b'),
+        a1 = $('#site'),
+        a2 = $('#time'),
+        a3 = $('#temp');
+        
+    var a = {};
 
-      $b.on('click', function () {
+      $sendBtn.on('click', function () {
+        var data = [[al.val(), a2.val(), a3.val()]];
         a = {
-          data: $a1.val() + ',' + $a2.val() + ',' + $a3.val(),
-          sheetUrl: 'https://docs.google.com/spreadsheets/d/1pxe44BpwusIE8D8YtjvKe8Y8eNuKZ3qH5ZCa7hBHVDs/edit?usp=sharing',
-          sheetTag: 'wrTest'
+          url : sheetsUrl.val(),
+          name : sheetName.val(),
+          data : data.toString(),
+          row : data.length,
+          column : data[0].length,
+          insertType : type.val()
         };
-        console.log(a);
-        $.get('https://script.google.com/macros/s/AKfycbyPPidEYflHk6xvQvuhbXh4zwwGcqlJlxZ6rlQ4s5Lmy-g_HMs/exec', a);
+        
+        //$.get('https://script.google.com/macros/s/AKfycbyPPidEYflHk6xvQvuhbXh4zwwGcqlJlxZ6rlQ4s5Lmy-g_HMs/exec', a);
+        $.get(appUrl.val(), a);
       });
-    });
   </script>
   <!-- 2019/8/23 在中興大學圖書館測試寫入-->
+  <!-- 2020/8/28 測試寫入-->
 
 </body>
 
