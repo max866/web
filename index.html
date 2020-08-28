@@ -76,11 +76,11 @@
         a2 = $('#time'),
         a3 = $('#temp');
         
-    var a = {};
+    var parameter = {};
 
       $sendBtn.on('click', function () {
         var data = [[al.val(), a2.val(), a3.val()]];
-        a = {
+        parameter = {
           url : sheetsUrl.val(),
           name : sheetName.val(),
           data : data.toString(),
