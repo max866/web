@@ -2,104 +2,74 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Jr's Test Web</title>
-  <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-  <script src="./getTemperture.js"></script>
-  <script src="./getAccountBookJS.js"></script>
-  <style type="text/css">
-    form{
-      line-height: 2em;
-    }
-    form>input,form>select{
-      padding: 5px 10px;border: 1px solid #888888;border-radius: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jr's Test Web</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.0.js"></script> -->
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="./getTemperture.js"></script>
+    <script src="./getAccountBookJS.js"></script>
+    <style type="text/css">
+        form {
+            line-height: 2em;
+        }
+
+        form>input,
+        form>select {
+            padding: 5px 10px;
+            border: 1px solid #888888;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
-  測站：<span id="site"></span></br>
-  資料時間：<span id="time"></span></br>
-  現在溫度：<span id="temp"></span> &deg;c</br>
-  <hr>
-  <form>
-    <h2>記帳簿</h2>
-    日期：<input type="date" id="calendar" name="getdate"><br/>
-    支出來源：<select id="payfor" name="payfor">
-        <option vaule="tcb">合作金庫信用卡</option>
-        <option vaule="cash" selected>台幣現金</option>
-        <option vaule="postoffice">郵局</option>
-        <option vaule="esunbank">玉山國旅卡</option>
-        <option vaule="rekuten">樂天信用卡</option>
-        <option vaule="easycard">悠遊卡</option>
-      </select><br/>
-    支出總類：<select id="buy" name="buy">
-      <option value="meal">餐費</option>
-      <option value="sanck" selected>零食宵夜食品</option>
-      <option value="necessy">日用品</option>
-      <option value="3c">3C用品</option>
-      <option value="hydropower">水電瓦斯</option>
-      <option value="traffic">交通</option>
-      <option value="gasoline">加油</option>
-      <option value="telfee">電話通訊費</option>
-      <option value="entertainment">娛樂</option>
-      <option value="maintenance">汽機車維修</option>
-      <option value="edu">教育進修</option>
-      <option value="pet">寵物</option>
-      <option value="insurance">保險</option>
-      <option value="tax">税</option>
-      <option value="medical">醫療健康</option>
-      <option value="invest">投資</option>
-      <option value="gift">禮金</option>
-      <option value="loan">償還貸款</option>
-      <option value="other">其他</option>
-    </select><br/>
-    金額：<input type="number" id="fee" name="fee" min="0" onclick="this.value = '' " required><br/>
-    明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br/>
-    <!-- <input type="submit" value="送出"> -->
-    <button onclick="saveValues()">寫入Google表單</button>
-  </form>
-  <hr/>
-  
-  <!-- 2020/8/28 測試寫入-->
-  <!-- 2019/8/23 在中興大學圖書館測試寫入-->
-  <button id="sendBtn">TestSave</button>
-  <script>
-    var appUrl = 'https://script.google.com/macros/s/AKfycbwxxBf4J3xIuWdRAR4zDp_t-DSVjBFvPyxc95NMT9Jx2SA7FLE/exec',
-        sheetsUrl = 'https://docs.google.com/spreadsheets/d/1pxe44BpwusIE8D8YtjvKe8Y8eNuKZ3qH5ZCa7hBHVDs/edit?usp=sharing',
-        sheetName = 'wrTest',
-        type = 'bottom',
-        sendBtn = $('#sendBtn'),
-        a1 = $('#date'),
-        a2 = $('#payfor'),
-        a3 = $('#buy');
-        
-    var parameter = {};
+    測站：<span id="site"></span></br>
+    資料時間：<span id="time"></span></br>
+    現在溫度：<span id="temp"></span> &deg;c</br>
+    <hr>
+    <form>
+        <h2>記帳簿</h2>
+        日期：<input type="date" id="calendar" name="getdate"><br />
+        支出來源：<select id="payfor" name="payfor">
+            <option vaule="合作金庫信用卡">合作金庫信用卡</option>
+            <option vaule="台幣現金" selected>台幣現金</option>
+            <option vaule="郵局">郵局</option>
+            <option vaule="玉山國旅卡">玉山國旅卡</option>
+            <option vaule="樂天信用卡">樂天信用卡</option>
+            <option vaule="悠遊卡">悠遊卡</option>
+        </select><br />
+        支出總類：<select id="expenditure_type" name="expenditure_type">
+            <option value="餐費">餐費</option>
+            <option value="零食宵夜食品">零食宵夜食品</option>
+            <option value="日用品" selected>日用品</option>
+            <option value="3C用品">3C用品</option>
+            <option value="水電瓦斯">水電瓦斯</option>
+            <option value="交通">交通</option>
+            <option value="加油">加油</option>
+            <option value="電話通訊費">電話通訊費</option>
+            <option value="娛樂">娛樂</option>
+            <option value="汽機車維修">汽機車維修</option>
+            <option value="教育進修">教育進修</option>
+            <option value="寵物">寵物</option>
+            <option value="保險">保險</option>
+            <option value="税">税</option>
+            <option value="醫療健康">醫療健康</option>
+            <option value="投資">投資</option>
+            <option value="禮金">禮金</option>
+            <option value="償還貸款">償還貸款</option>
+            <option value="其他">其他</option>
+        </select><br />
+        金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
+        明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br />
+        備註：<input type="text" id="memo" name="memo" onclick="this.value = '' "><br />
+        <button onclick="saveValues()">寫入Google表單</button>
+    </form>
+    <hr>
 
-    sendBtn.on('click', function () {
-      var data = [[al.val(), a2.val(), a3.val()]];
-      parameter = {
-        url : sheetsUrl.val(),
-        name : sheetName.val(),
-        data : data.toString(),
-        row : data.length,
-        column : data[0].length,
-        insertType : type.val()
-      };
-      
-      //$.get('https://script.google.com/macros/s/AKfycbyPPidEYflHk6xvQvuhbXh4zwwGcqlJlxZ6rlQ4s5Lmy-g_HMs/exec', a);
-      $.get(appUrl.val(), parameter);
-    });
-  </script>
-  <!-- 2019/8/23 在中興大學圖書館測試寫入-->
-  <!-- 2020/8/28 測試寫入-->
+
 
 </body>
 
 </html>
-
-
-
-
