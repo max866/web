@@ -32,7 +32,7 @@ function saveValues() {
         data: data.toString(),
         row: data.length,
         column: data[0].length,
-        insertType: 'bottom'
+        insertType: 'top'
     };
     $.get(appUrl, parameter);
   }   
