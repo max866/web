@@ -1,1 +1,39 @@
-var _0x453d=['|||slice|t|ajax|success|function|var|new||Date||getDate||getMonth|getFullYear|calendar|val','$.5({6:7(){8\x20e=9\x20b,a=(\x220\x22+e.d()).3(-2),4=(\x220\x22+(e.f()+1)).3(-2),c=e.g()+\x22-\x22+4+\x22-\x22+a;$(\x22#h\x22).i(c)}});','\x5cw+','split','replace'];(function(_0x331781,_0x453db4){var _0x3a1000=function(_0x5c639d){while(--_0x5c639d){_0x331781['push'](_0x331781['shift']());}};_0x3a1000(++_0x453db4);}(_0x453d,0xbf));var _0x3a10=function(_0x331781,_0x453db4){_0x331781=_0x331781-0x0;var _0x3a1000=_0x453d[_0x331781];return _0x3a1000;};var _0x4958eb=_0x3a10;eval(function(_0x5c639d,_0xeac9d2,_0x1d003b,_0x3b6953,_0x18e385,_0x5eadc1){var _0x3930af=_0x3a10;_0x18e385=function(_0x22a527){return _0x22a527['toString'](_0xeac9d2);};if(!''[_0x3930af('0x3')](/^/,String)){while(_0x1d003b--)_0x5eadc1[_0x18e385(_0x1d003b)]=_0x3b6953[_0x1d003b]||_0x18e385(_0x1d003b);_0x3b6953=[function(_0x3d6186){return _0x5eadc1[_0x3d6186];}],_0x18e385=function(){var _0x4eb7f6=_0x3930af;return _0x4eb7f6('0x1');},_0x1d003b=0x1;};while(_0x1d003b--)if(_0x3b6953[_0x1d003b])_0x5c639d=_0x5c639d[_0x3930af('0x3')](new RegExp('\x5cb'+_0x18e385(_0x1d003b)+'\x5cb','g'),_0x3b6953[_0x1d003b]);return _0x5c639d;}(_0x4958eb('0x0'),0x13,0x13,_0x4958eb('0x4')[_0x4958eb('0x2')]('|'),0x0,{}));
+$.ajax({
+  success: function () {
+    // 給input  date設定預設值
+    var now = new Date();
+    //格式化日，如果小於9，前面補0
+    var day = ("0" + now.getDate()).slice(-2);
+    //格式化月，如果小於9，前面補0
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    //拼裝完整日期格式
+    var today = now.getFullYear() + "-" + (month) + "-" + (day);
+    //完成賦值
+    $('#calendar').val(today);
+  }
+});
+
+
+function saveValues() {
+  var price = $('#price').val();
+  if (price){
+    var appUrl = "https://script.google.com/macros/s/AKfycbzbBRDe-M_qG16v1GrRFuLTSAd-K9iJIBkrxBvg6loCIp5yb6cd/exec";
+    var sheetsUrl = "https://docs.google.com/spreadsheets/d/1NzHDmTcM5IrTUMEaon16l6hTnDPQebnynZcMb50_aq8/edit?usp=sharing";
+    var timestamp = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString();
+    var calendar = $('#calendar'),
+        payfor = $('#payfor'),
+        expenditure_type = $('#expenditure_type'),
+        content = $('#content'),
+        memo = $('#memo');
+    var data = [timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val()];
+    var parameter = {
+        url: sheetsUrl,
+        name: 'expenditure',
+        data: data.toString(),
+        row: data.length,
+        column: data[0].length,
+        insertType: 'bottom'
+    };
+    $.get(appUrl, parameter);
+  }   
+};
