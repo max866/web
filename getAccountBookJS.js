@@ -25,7 +25,7 @@ function saveValues() {
         expenditure_type = $('#expenditure_type'),
         content = $('#content'),
         memo = $('#memo');
-    var data = [timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val()];
+    var data = [[timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val()]];
     var parameter = {
         url: sheetsUrl,
         name: 'expenditure',
