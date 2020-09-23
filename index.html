@@ -45,7 +45,6 @@
                     insertType: 'bottom'
                 };
                 $.get(appUrl, parameter);
-                document.getElementById("demo").innerHTML = "run";
             }
         };
     </script>
@@ -94,13 +93,12 @@
             金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
             明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br />
             備註：<input type="text" id="memo" name="memo" onclick="this.value = '' "><br />
-        
+        </form>        
         <button id="saveValues" onclick="saveValues()">寫入Google表單</button>
-    </form>
         <hr>
     </div>
-    <div id="section3">
-        <p id="demo">demo3</p>
+    <div id="version">
+        <p id="version">ver.20200923-1</p>
     </div>
 </body>
 
