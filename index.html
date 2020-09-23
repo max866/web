@@ -46,6 +46,7 @@
                     insertType: 'bottom'
                 };
                 $.get(appUrl, parameter);
+                document.getElementById("demo").innerHTML = "run";
             }
         };
     </script>
@@ -94,6 +95,7 @@
         <button id="saveValues" onclick="saveValues()">寫入Google表單</button>
     </form>
     <hr>
+    <p id="demo"></p>
 </body>
 
 </html>
