@@ -7,13 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Jr's Test Web</title>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-1.9.1.js"></script> -->
-
     <style type="text/css">
         form {
             line-height: 2em;
         }
-
         form>input,
         form>select {
             padding: 5px 10px;
@@ -45,9 +42,10 @@
                     insertType: 'bottom'
                 };
                 $.get(appUrl, parameter);
-
+                $('#price').val('');
+                $('#content').val('');
+                $('#memo').val('');
             }
-
         }
         function reset(){
             window.location.reload();
@@ -104,7 +102,7 @@
         <hr>
     </div>
     <div id="version">
-        <p id="version">ver.20200923-10</p>
+        <p id="version">ver.20200923-11</p>
     </div>
 </body>
 
