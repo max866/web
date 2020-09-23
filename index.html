@@ -45,11 +45,14 @@
                     insertType: 'bottom'
                 };
                 $.get(appUrl, parameter);
+                setTimeout(reset(),1000)
+                
             }
-            $('price').val();
-            $('content').val();
-            $('memo').val();
-        };
+
+        }
+        function reset(){
+            window.location.reload();
+        }
     </script>
 </head>
 
@@ -61,7 +64,7 @@
         <hr>
     </div>
     <div id="accountBook">
-        <form>
+        <form id="accountBookForm">
             <h2>記帳簿</h2>
             日期：<input type="date" id="calendar" name="getdate"><br />
             支出來源：<select id="payfor" name="payfor">
@@ -96,12 +99,13 @@
             金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
             明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br />
             備註：<input type="text" id="memo" name="memo" onclick="this.value = '' "><br />
-        </form>        
+        </form>
         <button id="saveValues" onclick="saveValues()">寫入Google表單</button>
+        <button id="reset" onclick="reset()">重新載入頁面</button>
         <hr>
     </div>
     <div id="version">
-        <p id="version">ver.20200923-2</p>
+        <p id="version">ver.20200923-8</p>
     </div>
 </body>
 
