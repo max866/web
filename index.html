@@ -52,48 +52,55 @@
 </head>
 
 <body>
-    測站：<span id="site"></span></br>
-    資料時間：<span id="time"></span></br>
-    現在溫度：<span id="temp"></span> &deg;c</br>
-    <hr>
-
-    <h2>記帳簿</h2>
-    日期：<input type="date" id="calendar" name="getdate"><br />
-    支出來源：<select id="payfor" name="payfor">
-        <option vaule="合作金庫信用卡">合作金庫信用卡</option>
-        <option vaule="台幣現金" selected>台幣現金</option>
-        <option vaule="郵局">郵局</option>
-        <option vaule="玉山國旅卡">玉山國旅卡</option>
-        <option vaule="樂天信用卡">樂天信用卡</option>
-        <option vaule="悠遊卡">悠遊卡</option>
-    </select><br />
-    支出總類：<select id="expenditure_type" name="expenditure_type">
-        <option value="餐費">餐費</option>
-        <option value="零食宵夜食品">零食宵夜食品</option>
-        <option value="日用品" selected>日用品</option>
-        <option value="3C用品">3C用品</option>
-        <option value="水電瓦斯">水電瓦斯</option>
-        <option value="交通">交通</option>
-        <option value="加油">加油</option>
-        <option value="電話通訊費">電話通訊費</option>
-        <option value="娛樂">娛樂</option>
-        <option value="汽機車維修">汽機車維修</option>
-        <option value="教育進修">教育進修</option>
-        <option value="寵物">寵物</option>
-        <option value="保險">保險</option>
-        <option value="税">税</option>
-        <option value="醫療健康">醫療健康</option>
-        <option value="投資">投資</option>
-        <option value="禮金">禮金</option>
-        <option value="償還貸款">償還貸款</option>
-        <option value="其他">其他</option>
-    </select><br />
-    金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
-    明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br />
-    備註：<input type="text" id="memo" name="memo" onclick="this.value = '' "><br />
-    <button id="saveValues" onclick="saveValues()">寫入Google表單</button>
-    <hr>
-    <p id="demo">demo1</p>
+    <div id="watch">
+        測站：<span id="site"></span></br>
+        資料時間：<span id="time"></span></br>
+        現在溫度：<span id="temp"></span> &deg;c</br>
+        <hr>
+    </div>
+    <div id="accountBook">
+        <form>
+            <h2>記帳簿</h2>
+            日期：<input type="date" id="calendar" name="getdate"><br />
+            支出來源：<select id="payfor" name="payfor">
+                <option vaule="合作金庫信用卡">合作金庫信用卡</option>
+                <option vaule="台幣現金" selected>台幣現金</option>
+                <option vaule="郵局">郵局</option>
+                <option vaule="玉山國旅卡">玉山國旅卡</option>
+                <option vaule="樂天信用卡">樂天信用卡</option>
+                <option vaule="悠遊卡">悠遊卡</option>
+            </select><br />
+            支出總類：<select id="expenditure_type" name="expenditure_type">
+                <option value="餐費">餐費</option>
+                <option value="零食宵夜食品">零食宵夜食品</option>
+                <option value="日用品" selected>日用品</option>
+                <option value="3C用品">3C用品</option>
+                <option value="水電瓦斯">水電瓦斯</option>
+                <option value="交通">交通</option>
+                <option value="加油">加油</option>
+                <option value="電話通訊費">電話通訊費</option>
+                <option value="娛樂">娛樂</option>
+                <option value="汽機車維修">汽機車維修</option>
+                <option value="教育進修">教育進修</option>
+                <option value="寵物">寵物</option>
+                <option value="保險">保險</option>
+                <option value="税">税</option>
+                <option value="醫療健康">醫療健康</option>
+                <option value="投資">投資</option>
+                <option value="禮金">禮金</option>
+                <option value="償還貸款">償還貸款</option>
+                <option value="其他">其他</option>
+            </select><br />
+            金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
+            明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br />
+            備註：<input type="text" id="memo" name="memo" onclick="this.value = '' "><br />
+        </form>
+        <button id="saveValues" onclick="saveValues()">寫入Google表單</button>
+        <hr>
+    </div>
+    <div id="section3">
+        <p id="demo">demo1</p>
+    </div>
 </body>
 
 </html>
