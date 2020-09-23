@@ -95,15 +95,15 @@
                 <option value="其他">其他</option>
             </select><br />
             金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
-            明細：<input type="text" id="content" name="content" onclick="this.value = '' "><br />
-            備註：<input type="text" id="memo" name="memo" onclick="this.value = '' "><br />
+            明細：<input type="text" id="content" name="content" autocomplete="on" onclick="this.value = '' "><br />
+            備註：<input type="text" id="memo" name="memo" autocomplete="on" onclick="this.value = '' "><br />
         </form>
         <button id="saveValues" onclick="saveValues()">寫入Google表單</button>
         <button id="reset" onclick="reset()">reload</button>
         <hr>
     </div>
     <div id="version">
-        <p id="version">ver.20200923-14</p>
+        <p id="version">ver.20200923-15</p>
     </div>
 </body>
 
