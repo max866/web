@@ -42,8 +42,7 @@
                     insertType: 'bottom'
                 };
                 $.get(appUrl, parameter);
-                $('payfor').empty();
-                $('expenditure_type').empty();
+                setTimeout("reset()",1000);
                 $('#price').val('');
                 $('#content').val('');
                 $('#memo').val('');
@@ -104,7 +103,7 @@
         <hr>
     </div>
     <div id="version">
-        <p id="version">ver.20200923-12</p>
+        <p id="version">ver.20200923-14</p>
     </div>
 </body>
 
