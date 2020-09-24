@@ -126,19 +126,19 @@
     <div id="moto">
         <form onsubmit=saveValues_moto()>
             <h2>機車保養</h2>
-            <label id="moto_item">日期：</label><input type="date" id="calendar_moto" name="calendar_moto"><br />
-            <label id="moto_item">Moto:</label><select id="motocycle" name="motocycle">
+            日期：<input type="date" id="calendar_moto" name="calendar_moto"><br />
+            Moto:<select id="motocycle" name="motocycle">
                 <option value="MLL-632">MLL-632</option>
                 <option value="MLW-069" selected>MLW-069</option>
                 <option value="322-DYC">322-DYC</option>
                 <option value="NUM-072">NUM-072</option>
             </select><br />
-            <label id="moto_item">里程數：</label><input type="number" id="km" name="km" min="0" onclick="this.value = '' " required>km<br />
-            <label id="moto_item">更換：</label><br /><input type="checkbox" id="engine_oil" name="engine_oil" value="機油">機油<br />
+            里程數：<input type="number" id="km" name="km" min="0" onclick="this.value = '' " required>km<br />
+            更換：<br /><input type="checkbox" id="engine_oil" name="engine_oil" value="機油">機油<br />
             <input type="checkbox" id="gear_oil" name="gear_oil" value="齒輪油">齒輪油<br />
             <input type="checkbox" id="other_parts" name="other_parts" value="其他零件">其他零件
             <input type="text" id="other_parts_name" name="other_parts_name" autocomplete="on"><br />
-            <label id="moto_item">備註：</label><input type="text" id="memo_moto" name="memo_moto" autocomplete="on" onclick="this.value = '' "><br />
+            備註：<input type="text" id="memo_moto" name="memo_moto" autocomplete="on" onclick="this.value = '' "><br />
             <input type="submit" value="寫入Google表單_moto" />
         </form>
         <hr>
