@@ -19,9 +19,28 @@
             border-radius: 5px;
         }
 
-        #moto_item {
-            text-align: :right;
-            width: 30px;
+        .col-1 {
+            text-align: right;
+        }
+
+        .col-2>select,
+        input {
+            padding: 5px 10px;
+            border: 1px solid #888888;
+            border-radius: 5px;
+
+        }
+
+        table {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+            line-height: 0px;
+            border-collapse: collapse;
+            border-spacing: 0;
         }
     </style>
     <script>
@@ -123,28 +142,60 @@
         <button id="reset" onclick="reset()">reload</button></br>
         <hr>
     </div>
-    <div id="moto">
+    <div>
         <form onsubmit=saveValues_moto()>
             <h2>機車保養</h2>
-            日期：<input type="date" id="calendar_moto" name="calendar_moto"><br />
-            Moto:<select id="motocycle" name="motocycle">
-                <option value="MLL-632">MLL-632</option>
-                <option value="MLW-069" selected>MLW-069</option>
-                <option value="322-DYC">322-DYC</option>
-                <option value="NUM-072">NUM-072</option>
-            </select><br />
-            里程數：<input type="number" id="km" name="km" min="0" onclick="this.value = '' " required>km<br />
-            更換：<br /><input type="checkbox" id="engine_oil" name="engine_oil" value="機油">機油<br />
-            <input type="checkbox" id="gear_oil" name="gear_oil" value="齒輪油">齒輪油<br />
-            <input type="checkbox" id="other_parts" name="other_parts" value="其他零件">其他零件
-            <input type="text" id="other_parts_name" name="other_parts_name" autocomplete="on"><br />
-            備註：<input type="text" id="memo_moto" name="memo_moto" autocomplete="on" onclick="this.value = '' "><br />
-            <input type="submit" value="寫入Google表單_moto" />
+            <table>
+                <tr>
+                    <td class="col-1">日期：</td>
+                    <td class="col-2"><input type="date" id="calendar_moto" name="calendar_moto"></td>
+                </tr>
+                <tr>
+                    <td class="col-1">Moto：</td>
+                    <td class="col-2"><select id="motocycle" name="motocycle">
+                            <option value="MLL-632">MLL-632</option>
+                            <option value="MLW-069" selected>MLW-069</option>
+                            <option value="322-DYC">322-DYC</option>
+                            <option value="NUM-072">NUM-072</option>
+                        </select></td>
+                </tr>
+                <tr>
+                    <td class="col-1">里程數：</td>
+                    <td class="col-2"><input type="number" id="km" name="km" min="0" onclick="this.value = '' "
+                            required> km</td>
+                </tr>
+                <tr>
+                    <td class="col-1">更換：</td>
+                    <td class="col-2"><input type="checkbox" id="engine_oil" name="engine_oil" value="機油">機油</td>
+                </tr>
+                <tr>
+                    <td class="col-1"></td>
+                    <td class="col-2"><input type="checkbox" id="gear_oil" name="gear_oil" value="齒輪油">齒輪油</td>
+                </tr>
+                <tr>
+                    <td class="col-1"></td>
+                    <td class="col-2"><input type="checkbox" id="other_parts" name="other_parts" value="其他零件">其他零件</td>
+                </tr>
+                <tr>
+                    <td class="col-1"></td>
+                    <td class="col-2"><input type="text" id="other_parts_name" name="other_parts_name"
+                            autocomplete="on"></td>
+                </tr>
+                <tr>
+                    <td class="col-1">備註：</td>
+                    <td class="col-2"><input type="text" id="memo_moto" name="memo_moto" autocomplete="on"
+                            onclick="this.value = '' "></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;padding: 10px;" colspan="2"><input type="submit" value="寫入Google表單_moto" /></td>
+                </tr>
+            </table>
+
         </form>
         <hr>
     </div>
     <div id="version">
-        <p id="version">ver.20200924-1</p>
+        <p id="version">ver.20200924-2</p>
     </div>
 </body>
 
