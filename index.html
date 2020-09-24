@@ -12,10 +12,15 @@
             line-height: 2em;
         }
 
-        form>input,
-        form>select {
-            padding: 5px 10px;
-            border: 1px solid #888888;
+        button {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 10px 18px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
             border-radius: 5px;
         }
 
@@ -23,24 +28,18 @@
             text-align: right;
         }
 
-        .col-2>select,
+        select,
         input {
             padding: 5px 10px;
             border: 1px solid #888888;
             border-radius: 5px;
-
         }
 
         table {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            font-size: 100%;
-            font: inherit;
-            vertical-align: baseline;
-            line-height: 0px;
+            width: 400px;
+            border: 1px solid #888888;
             border-collapse: collapse;
-            border-spacing: 0;
+            line-height: 0px;
         }
     </style>
     <script>
@@ -106,8 +105,8 @@
             <h2>記帳簿</h2>
             日期：<input type="date" id="calendar" name="getdate"></br>
             支出來源：<select id="payfor" name="payfor">
-                <option vaule="合作金庫信用卡">合庫信用卡</option>
-                <option vaule="台幣現金" selected>台幣現金</option>
+                <option vaule="合庫信用卡" selected>合庫信用卡</option>
+                <option vaule="台幣現金">台幣現金</option>
                 <option vaule="郵局">郵局</option>
                 <option vaule="玉山國旅卡">玉山國旅卡</option>
                 <option vaule="樂天信用卡">樂天信用卡</option>
@@ -116,11 +115,11 @@
             支出總類：<select id="expenditure_type" name="expenditure_type">
                 <option value="餐費">餐費</option>
                 <option value="零食宵夜食品">零食宵夜食品</option>
-                <option value="日用品" selected>日用品</option>
+                <option value="日用品">日用品</option>
                 <option value="3C用品">3C用品</option>
                 <option value="水電瓦斯">水電瓦斯</option>
                 <option value="交通">交通</option>
-                <option value="加油">加油</option>
+                <option value="加油" selected>加油</option>
                 <option value="電話通訊費">電話通訊費</option>
                 <option value="娛樂">娛樂</option>
                 <option value="汽機車維修">汽機車維修</option>
@@ -146,7 +145,7 @@
         <form onsubmit=saveValues_moto()>
             <h2>機車保養</h2>
             <table>
-                <tr>
+                <tr style="background-color: #f0f0f0;">
                     <td class="col-1">日期：</td>
                     <td class="col-2"><input type="date" id="calendar_moto" name="calendar_moto"></td>
                 </tr>
@@ -159,27 +158,33 @@
                             <option value="NUM-072">NUM-072</option>
                         </select></td>
                 </tr>
-                <tr>
+                <tr style="background-color: #f0f0f0;">
                     <td class="col-1">里程數：</td>
                     <td class="col-2"><input type="number" id="km" name="km" min="0" onclick="this.value = '' "
                             required> km</td>
                 </tr>
                 <tr>
+                    <td class="col-1">加油：</td>
+                    <td class="col-2"><label for="oil"><input type="checkbox" id="oil" name="oil" value="加油">加油</label>
+                    </td>
+
+                </tr>
+                <tr style="background-color: #f0f0f0;">
                     <td class="col-1">更換：</td>
-                    <td class="col-2"><input type="checkbox" id="engine_oil" name="engine_oil" value="機油">機油</td>
+                    <td class="col-2"><label for="engine_oil"><input type="checkbox" id="engine_oil" name="engine_oil"
+                                value="機油">機油</label></td>
                 </tr>
-                <tr>
+                <tr style="background-color: #f0f0f0;">
                     <td class="col-1"></td>
-                    <td class="col-2"><input type="checkbox" id="gear_oil" name="gear_oil" value="齒輪油">齒輪油</td>
+                    <td class="col-2"><label for="gear_oil"><input type="checkbox" id="gear_oil" name="gear_oil"
+                                value="齒輪油">齒輪油</label></td>
                 </tr>
-                <tr>
+                <tr style="background-color: #f0f0f0;">
                     <td class="col-1"></td>
-                    <td class="col-2"><input type="checkbox" id="other_parts" name="other_parts" value="其他零件">其他零件</td>
-                </tr>
-                <tr>
-                    <td class="col-1"></td>
-                    <td class="col-2"><input type="text" id="other_parts_name" name="other_parts_name"
-                            autocomplete="on"></td>
+                    <td class="col-2"><label for="other_parts"><input type="checkbox" id="other_parts"
+                                name="other_parts" value="其他零件">其他零件</label>
+                        <input type="text" id="other_parts_name" name="other_parts_name" autocomplete="on"
+                            style="display:none"></td>
                 </tr>
                 <tr>
                     <td class="col-1">備註：</td>
@@ -187,7 +192,7 @@
                             onclick="this.value = '' "></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;padding: 10px;" colspan="2"><input type="submit" value="寫入Google表單_moto" /></td>
+                    <td style="text-align: center;padding: 10px;" colspan="2"><button id="saveValues_moto" onclick="saveValues_moto()">寫入Google表單_moto</button></td>
                 </tr>
             </table>
 
@@ -197,6 +202,16 @@
     <div id="version">
         <p id="version">ver.20200924-2</p>
     </div>
+    <script>
+        const element = document.querySelector('#other_parts');
+        element.addEventListener('click', function () {
+            if ($('#other_parts').prop('checked')) {
+                $('#other_parts_name').show();
+            } else {
+                $('#other_parts_name').hide();
+            }
+        });
+    </script>
 </body>
 
 </html>
