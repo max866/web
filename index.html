@@ -86,9 +86,42 @@
             window.location.reload();
         }
         function saveValues_moto() {
-            var nowdate = $('#calendar_moto'),
-                moto = $('#moto')
-            alert('moto 已送出');
+            if($('#oil').prop("checked")){
+                var oil = 'v'
+            }else{
+                var oil = ''
+            }
+            if($('#engine_oil').prop("checked")){
+                var engine_oil = 'v'
+            }else{
+                var engine_oil = ''
+            }
+            if($('#gear_oil').prop("checked")){
+                var gear_oil = 'v'
+            }else{
+                var gear_oil = ''
+            }
+            if($('#other_parts').prop("checked")){
+                var other_parts = 'v'
+            }else{
+                var other_parts = ''
+            }
+            var calendar_moto = $('#calendar_moto'),
+                motocycle = $('#motocycle'),
+                km = $('#km'),
+                other_parts_name = $('#other_parts_name'),
+                memo_moto = $('#memo_moto');
+            var data = [[timestamp, calendar_moto.val(), motocycle.val(), km.val(), oil, engine_oil, gear_oil, other_parts_name.val(), memo_moto.val()]];
+            var parameter = {
+                url: sheetsUrl,
+                name: 'moto',
+                data: data.toString(),
+                row: data.length,
+                column: data[0].length,
+                insertType: 'bottom'
+            }
+            $.get(appUrl, parameter);
+            setTimeout("reset()", 1000);
         }
     </script>
 </head>
@@ -142,7 +175,6 @@
         <hr>
     </div>
     <div>
-        <form onsubmit=saveValues_moto()>
             <h2>機車保養</h2>
             <table>
                 <tr style="background-color: #f0f0f0;">
@@ -192,15 +224,14 @@
                             onclick="this.value = '' "></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;padding: 10px;" colspan="2"><button id="saveValues_moto" onclick="saveValues_moto()">寫入Google表單_moto</button></td>
+                    <td style="text-align: center;padding: 10px;" colspan="2"><button id="saveValues_moto"
+                            onclick="saveValues_moto()">寫入Google表單_moto</button></td>
                 </tr>
             </table>
-
-        </form>
         <hr>
     </div>
     <div id="version">
-        <p id="version">ver.20200924-2</p>
+        <p id="version">ver.20200924-4</p>
     </div>
     <script>
         const element = document.querySelector('#other_parts');
