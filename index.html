@@ -58,7 +58,7 @@
         var appUrl = "https://script.google.com/macros/library/d/18zXbPQBxGBSgAhQR9dNISTZCfpevmP5eF87Pwta1iz-IzL20aFw9XuU5/7";
         var sheetsUrl = "https://docs.google.com/spreadsheets/d/1NzHDmTcM5IrTUMEaon16l6hTnDPQebnynZcMb50_aq8/edit?usp=sharing";
         var timestamp = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
-
+        var parameter = {};
         function saveValues_account() {
             var price = $('#price').val();
             if (price) {
@@ -74,7 +74,7 @@
                     data: data.toString(),
                     row: data.length,
                     column: data[0].length,
-                    insertType: 'bottom'
+                    insertType: 'top'
                 };
                 $.get(appUrl, parameter);
                 setTimeout("reset()", 1000);
