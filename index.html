@@ -68,7 +68,8 @@
                     expenditure_type = $('#expenditure_type'),
                     content = $('#content'),
                     memo = $('#memo');
-                var data = [[timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val()]];
+                    who = $('#who');
+                var data = [[timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val(), who.val()]];
                 var parameter = {
                     url: sheetsUrl,
                     name: 'expenditure',
@@ -82,6 +83,7 @@
                 $('#price').val('');
                 $('#content').val('');
                 $('#memo').val('');
+                $('#who').val('');
             }
         }
         function reset() {
@@ -172,6 +174,9 @@
             金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
             明細：<input type="text" id="content" name="content" autocomplete="on" onclick="this.value = '' "><br />
             備註：<input type="text" id="memo" name="memo" autocomplete="on" onclick="this.value = '' "><br />
+            Who：<select id="who" name="who">
+                <option vaule="鵬智" selected>鵬智</option>
+                <option vaule="韻如">韻如</option></select></br>
         </form>
         <button id="saveValues_account" onclick="saveValues_account()">寫入Google表單_記帳</button>
         <button id="reset" onclick="reset()">reload</button></br>
