@@ -252,6 +252,43 @@
             }
         });
     </script>
+</hr>
+    <div id="firstZone">第一區：</div>
+    <div id="secondZone">第二區：</div>
+
+      <button onclick="reloadNumbers()">Reload</button>
+
+  <script>
+    function getRandomNumbers(min, max, count) {
+      const numbers = [];
+      while (numbers.length < count) {
+        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+        if (!numbers.includes(randomNum)) {
+          numbers.push(randomNum);
+        }
+      }
+      return numbers.sort((a, b) => a - b);
+    }
+
+    function reloadNumbers() {
+      const firstZoneElement = document.getElementById('firstZone');
+      const secondZoneElement = document.getElementById('secondZone');
+
+      // 清除上一次的數字
+      firstZoneElement.textContent = '第一區：';
+      secondZoneElement.textContent = '第二區：';
+
+      // 重新生成並顯示新的號碼
+      const firstZoneNumbers = getRandomNumbers(1, 38, 6);
+      const secondZoneNumber = getRandomNumbers(1, 8, 1)[0];
+
+      firstZoneElement.textContent += firstZoneNumbers.join(', ');
+      secondZoneElement.textContent += secondZoneNumber;
+    }
+
+    // 初始載入時呼叫一次
+    reloadNumbers();
+  </script>
 </body>
 
 </html>
