@@ -269,6 +269,14 @@
       return numbers.sort((a, b) => a - b);
     }
 
+    function countOccurrences(arr) {
+      const counts = {};
+      arr.forEach(num => {
+        counts[num] = (counts[num] || 0) + 1;
+      });
+      return counts;
+    }
+
     function reloadNumbers() {
       const firstZoneElement = document.getElementById('firstZone');
       const secondZoneElement = document.getElementById('secondZone');
@@ -277,12 +285,27 @@
       firstZoneElement.textContent = '第一區：';
       secondZoneElement.textContent = '第二區：';
 
-      // 重新生成並顯示新的號碼
-      const firstZoneNumbers = getRandomNumbers(1, 38, 6);
-      const secondZoneNumber = getRandomNumbers(1, 8, 1)[0];
+      // 進行1000次循環，統計每個號碼出現的次數
+      const firstZoneCounts = {};
+      const secondZoneCounts = {};
+      for (let i = 0; i < 1000; i++) {
+        const firstZoneNumbers = getRandomNumbers(1, 38, 6);
+        const secondZoneNumber = getRandomNumbers(1, 8, 1)[0];
 
-      firstZoneElement.textContent += firstZoneNumbers.join(', ');
-      secondZoneElement.textContent += secondZoneNumber;
+        firstZoneNumbers.forEach(num => {
+          firstZoneCounts[num] = (firstZoneCounts[num] || 0) + 1;
+        });
+
+        secondZoneCounts[secondZoneNumber] = (secondZoneCounts[secondZoneNumber] || 0) + 1;
+      }
+
+      // 找出第一區出現次數最多的前6個數字
+      const sortedFirstZone = Object.keys(firstZoneCounts).sort((a, b) => firstZoneCounts[b] - firstZoneCounts[a]).slice(0, 6);
+      firstZoneElement.textContent += sortedFirstZone.join(', ');
+
+      // 找出第二區出現次數最多的1個數字
+      const sortedSecondZone = Object.keys(secondZoneCounts).sort((a, b) => secondZoneCounts[b] - secondZoneCounts[a])[0];
+      secondZoneElement.textContent += sortedSecondZone;
     }
 
     // 初始載入時呼叫一次
