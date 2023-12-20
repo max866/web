@@ -251,7 +251,7 @@
             }
         });
     </script>
-    <div id="superLottotickets"><p>威力彩建議</p></div>
+    <div id="superLottotickets"><p>威力彩建議(10000次隨機)</p></div>
     <div id="firstZone"><hr>第一區：</div>
     <div id="secondZone">第二區：</div>
 
@@ -288,7 +288,7 @@
       // 進行1000次循環，統計每個號碼出現的次數
       const firstZoneCounts = {};
       const secondZoneCounts = {};
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 10000; i++) {
         const firstZoneNumbers = getRandomNumbers(1, 38, 6);
         const secondZoneNumber = getRandomNumbers(1, 8, 1)[0];
 
