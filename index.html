@@ -343,11 +343,11 @@
       const lotteryNumbersElement = document.getElementById('lotteryNumbers');
 
       // 清除上一次的數字
-      lotteryNumbersElement.textContent = '大樂透：';
+      lotteryNumbersElement.textContent = '大樂透建議(1,000,000次隨機)：';
 
       // 進行1000次循環，統計每組號碼出現的次數
       const allNumbers = [];
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 1000000; i++) {
         const lotteryNumbers = getRandomNumbers(1, 49, 6);
         allNumbers.push(...lotteryNumbers);
       }
