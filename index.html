@@ -347,7 +347,7 @@
 
       // 進行1000次循環，統計每組號碼出現的次數
       const allNumbers = [];
-      for (let i = 0; i < 1000000; i++) {
+      for (let i = 0; i < 1000; i++) {
         const lotteryNumbers = getRandomNumbers(1, 49, 6);
         allNumbers.push(...lotteryNumbers);
       }
@@ -355,7 +355,7 @@
       // 找出所有號碼出現次數
       const numberCounts = countOccurrences(allNumbers);
 
-      // 找出出現次數最多的前6個數字
+      // 找出出現次數最多的6個數字
       const sortedNumbers = Object.keys(numberCounts).sort((a, b) => numberCounts[b] - numberCounts[a]).slice(0, 6);
 
       lotteryNumbersElement.textContent += sortedNumbers.join(', ');
