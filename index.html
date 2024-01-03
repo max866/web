@@ -316,7 +316,7 @@
     reloadNumbers();
   </script>
         <div><hr></div>
-      <div id="lotteryNumbers">大樂透：</div>
+      <div id="lotteryNumbers">大樂透建議(1,000,000次隨機)：</div>
   <button onclick="reloadLotteryNumbers()">Reload</button>
 
   <script>
@@ -347,7 +347,7 @@
 
       // 進行1000次循環，統計每組號碼出現的次數
       const allNumbers = [];
-      for (let i = 0; i < 100000000; i++) {
+      for (let i = 0; i < 1000000; i++) {
         const lotteryNumbers = getRandomNumbers(1, 49, 6);
         allNumbers.push(...lotteryNumbers);
       }
