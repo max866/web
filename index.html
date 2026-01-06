@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
@@ -8,10 +8,7 @@
     <title>Jr's Test Web</title>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
     <style type="text/css">
-        form {
-            line-height: 2em;
-        }
-
+        form { line-height: 2em; }
         button {
             background-color: #008CBA;
             border: none;
@@ -22,101 +19,85 @@
             display: inline-block;
             font-size: 16px;
             border-radius: 5px;
+            cursor: pointer;
         }
-
-        .col-1 {
-            text-align: right;
-        }
-
-        select,
-        input {
+        .col-1 { text-align: right; }
+        select, input {
             padding: 5px 10px;
             border: 1px solid #888888;
             border-radius: 5px;
         }
-
         table {
             width: 400px;
             border: 1px solid #888888;
             border-collapse: collapse;
-            line-height: 0px;
+        }
+        #Observatory {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
     </style>
     <script>
-       $.ajax({
-    // 關鍵：從 Location 往回抓 Things，並取得最新的觀測值 (Observations)
-    url: "https://sta.ci.taiwan.gov.tw/STA_AirQuality_v2/v1.0/Locations(72)/Things?$expand=Datastreams($expand=Observations($orderby=phenomenonTime desc;$top=1))",
-    dataType: "json",
-    success: function (data) {
-        if (data.value && data.value.length > 0) {
-            // 取得該位置的第一個設備 (Thing)
-            let thing = data.value[0]; 
-            let datastreams = thing.Datastreams;
-            
-            let temp = "--";
-            let pm25 = "--";
-            let updateTime = "";
+        $(document).ready(function () {
+            // 1. 抓取環境部物聯網 API (南投市 Locations 72)
+            $.ajax({
+                url: "https://sta.ci.taiwan.gov.tw/STA_AirQuality_v2/v1.0/Locations(72)/Things?$expand=Datastreams($expand=Observations($orderby=phenomenonTime desc;$top=1))",
+                dataType: "json",
+                success: function (data) {
+                    if (data.value && data.value.length > 0) {
+                        let thing = data.value[0];
+                        let datastreams = thing.Datastreams;
+                        let temp = "--", pm25 = "--", updateTime = "";
 
-            // 遍歷所有感測項目
-            datastreams.forEach(ds => {
-                if (ds.Observations && ds.Observations.length > 0) {
-                    let latestObs = ds.Observations[0];
-                    
-                    // 根據感測項目名稱儲存數值
-                    if (ds.name === "Temperature") {
-                        temp = latestObs.result;
-                        updateTime = latestObs.phenomenonTime; // 以溫度更新時間為基準
+                        datastreams.forEach(ds => {
+                            if (ds.Observations && ds.Observations.length > 0) {
+                                let latestObs = ds.Observations[0];
+                                if (ds.name === "Temperature") {
+                                    temp = latestObs.result;
+                                    updateTime = latestObs.phenomenonTime;
+                                }
+                                if (ds.name === "PM2.5") {
+                                    pm25 = latestObs.result;
+                                }
+                            }
+                        });
+
+                        $("#site").html(thing.properties.stationName || "南投市監測站");
+                        $("#time").html(new Date(updateTime).toLocaleString());
+                        $("#temp").html(temp);
+                        $("#pm25").html(pm25);
+                    } else {
+                        $("#site").html("目前無資料");
                     }
-                    if (ds.name === "PM2.5") {
-                        pm25 = latestObs.result;
-                    }
+                },
+                error: function () {
+                    $("#site").html("API 連線失敗");
                 }
             });
 
-            // 顯示到網頁上
-            $("#site").html(thing.properties.stationName || "南投市監測站");
-            $("#time").html(new Date(updateTime).toLocaleString());
-            $("#temp").html(temp + " °C");
-            // 如果你有 PM2.5 的欄位
-            $("#pm25").html(pm25); 
+            // 2. 初始化日曆時間 (取代原本多餘的 AJAX)
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear() + "-" + (month) + "-" + (day);
+            $('#calendar').val(today);
+            $('#calendar_moto').val(today);
 
-        } else {
-            $("#site").html("目前無資料");
-        }
-    },
-    error: function () {
-        $("#site").html("API 連線失敗");
-    }
-});
-
-        // 每 10 分鐘自動重新整理頁面
-        setTimeout(function () { location.reload(); }, 6e5);
-        $.ajax({
-            success: function () {
-                var now = new Date();
-                var day = ("0" + now.getDate()).slice(-2);
-                var month = ("0" + (now.getMonth() + 1)).slice(-2);
-                var today = now.getFullYear() + "-" + (month) + "-" + (day);
-                $('#calendar').val(today);
-                $('#calendar_moto').val(today);
-            }
+            // 每 10 分鐘自動重新整理
+            setTimeout(function () { location.reload(); }, 600000);
         });
-        //var appUrl = "https://script.google.com/macros/s/AKfycbzbBRDe-M_qG16v1GrRFuLTSAd-K9iJIBkrxBvg6loCIp5yb6cd/exec";
+
+        // --- Google Sheet 儲存功能 ---
         var appUrl = "https://script.google.com/macros/s/AKfycbznrcLiQ1opYZrgD2jadsxU66wDdRzhfR98GXb26njY1IwzDY9gUVP4V596hbAAyzvtNQ/exec";
-        //var appUrl = "https://script.google.com/macros/library/d/18zXbPQBxGBSgAhQR9dNISTZCfpevmP5eF87Pwta1iz-IzL20aFw9XuU5/7";
         var sheetsUrl = "https://docs.google.com/spreadsheets/d/1NzHDmTcM5IrTUMEaon16l6hTnDPQebnynZcMb50_aq8/edit?usp=sharing";
-        var timestamp = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
-        var parameter = {};
+
         function saveValues_account() {
+            var timestamp = new Date().toLocaleString();
             var price = $('#price').val();
             if (price) {
-                var calendar = $('#calendar'),
-                    payfor = $('#payfor'),
-                    expenditure_type = $('#expenditure_type'),
-                    content = $('#content'),
-                    memo = $('#memo');
-                    who = $('#who');
-                var data = [[timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val(), who.val()]];
+                var data = [[timestamp, $('#calendar').val(), $('#payfor').val(), $('#expenditure_type').val(), price, $('#content').val(), $('#memo').val(), $('#who').val()]];
                 var parameter = {
                     url: sheetsUrl,
                     name: 'expenditure',
@@ -126,43 +107,18 @@
                     insertType: 'bottom'
                 };
                 $.get(appUrl, parameter);
+                alert("記帳已送出");
                 setTimeout("reset()", 1000);
-                $('#price').val('');
-                $('#content').val('');
-                $('#memo').val('');
-                $('#who').val('');
             }
         }
-        function reset() {
-            window.location.reload();
-        }
+
         function saveValues_moto() {
-            if($('#oil').prop("checked")){
-                var oil = 'v'
-            }else{
-                var oil = ''
-            }
-            if($('#engine_oil').prop("checked")){
-                var engine_oil = 'v'
-            }else{
-                var engine_oil = ''
-            }
-            if($('#gear_oil').prop("checked")){
-                var gear_oil = 'v'
-            }else{
-                var gear_oil = ''
-            }
-            if($('#other_parts').prop("checked")){
-                var other_parts = 'v'
-            }else{
-                var other_parts = ''
-            }
-            var calendar_moto = $('#calendar_moto'),
-                motocycle = $('#motocycle'),
-                km = $('#km'),
-                other_parts_name = $('#other_parts_name'),
-                memo_moto = $('#memo_moto');
-            var data = [[timestamp, calendar_moto.val(), motocycle.val(), km.val(), oil, engine_oil, gear_oil, other_parts_name.val(), memo_moto.val()]];
+            var timestamp = new Date().toLocaleString();
+            var oil = $('#oil').prop("checked") ? 'v' : '';
+            var engine_oil = $('#engine_oil').prop("checked") ? 'v' : '';
+            var gear_oil = $('#gear_oil').prop("checked") ? 'v' : '';
+            
+            var data = [[timestamp, $('#calendar_moto').val(), $('#motocycle').val(), $('#km').val(), oil, engine_oil, gear_oil, $('#other_parts_name').val(), $('#memo_moto').val()]];
             var parameter = {
                 url: sheetsUrl,
                 name: 'moto',
@@ -170,248 +126,41 @@
                 row: data.length,
                 column: data[0].length,
                 insertType: 'bottom'
-            }
+            };
             $.get(appUrl, parameter);
+            alert("機車保養已送出");
             setTimeout("reset()", 1000);
+        }
+
+        function reset() {
+            window.location.reload();
         }
     </script>
 </head>
 
 <body>
     <div id="Observatory">
-        測站：<span id="site"></span></br>
-        資料時間：<span id="time"></span></br>
-        現在溫度：<span id="temp"></span> &deg;c</br>
+        <strong>📍 測站：</strong><span id="site">載入中...</span><br>
+        <strong>🕒 資料時間：</strong><span id="time">--</span><br>
+        <strong>🌡️ 現在溫度：</strong><span id="temp">--</span> &deg;C<br>
+        <strong>🌫️ PM2.5 濃度：</strong><span id="pm25">--</span> μg/m³
         <hr>
     </div>
+
     <div id="accountBook">
         <form id="accountBookForm">
             <h2>記帳簿</h2>
-            日期：<input type="date" id="calendar" name="getdate"></br>
-            支出來源：<select id="payfor" name="payfor">
-                <option vaule="台幣現金"  selected>台幣現金</option>
-                <option vaule="樂天信用卡">中國信託</option>
-                <option vaule="樂天信用卡">永豐銀行</option>
-                <option vaule="玉山國旅卡">玉山國旅卡</option>
-                <option vaule="合庫信用卡">合庫信用卡</option>
-                <option vaule="郵局">郵局</option>
-                <option vaule="悠遊卡">悠遊卡</option>
-            </select></br>
-            支出總類：<select id="expenditure_type" name="expenditure_type">
+            日期：<input type="date" id="calendar" name="getdate"><br>
+            支出來源：<select id="payfor">
+                <option value="台幣現金" selected>台幣現金</option>
+                <option value="中國信託">中國信託</option>
+                <option value="永豐銀行">永豐銀行</option>
+                <option value="玉山國旅卡">玉山國旅卡</option>
+                <option value="合庫信用卡">合庫信用卡</option>
+                <option value="郵局">郵局</option>
+                <option value="悠遊卡">悠遊卡</option>
+            </select><br>
+            支出總類：<select id="expenditure_type">
                 <option value="餐費">餐費</option>
                 <option value="零食宵夜食品">零食宵夜食品</option>
-                <option value="日用品">日用品</option>
-                <option value="日用品">家庭用品</option>
-                <option value="3C用品">3C用品</option>
-                <option value="水電瓦斯">水電瓦斯</option>
-                <option value="交通">交通</option>
-                <option value="加油" selected>加油</option>
-                <option value="電話通訊費">電話通訊費</option>
-                <option value="娛樂">娛樂</option>
-                <option value="汽機車維修">汽機車維修</option>
-                <option value="教育進修">教育進修</option>
-                <option value="寵物">寵物</option>
-                <option value="保險">保險</option>
-                <option value="税">税</option>
-                <option value="醫療健康">醫療健康</option>
-                <option value="投資">投資</option>
-                <option value="禮金">禮金</option>
-                <option value="償還貸款">償還貸款</option>
-                <option value="信用卡費">信用卡費</option>
-                <option value="其他">其他</option>
-            </select><br />
-            金額：<input type="number" id="price" name="price" min="0" onclick="this.value = '' " required><br />
-            明細：<input type="text" id="content" name="content" autocomplete="on" onclick="this.value = '' "><br />
-            備註：<input type="text" id="memo" name="memo" autocomplete="on" onclick="this.value = '' "><br />
-            Who：<select id="who" name="who">
-                <option vaule="鵬智" selected>鵬智</option>
-                <option vaule="韻如">韻如</option></select></br>
-        </form>
-        <button id="saveValues_account" onclick="saveValues_account()">寫入Google表單_記帳</button>
-        <button id="reset" onclick="reset()">reload</button></br>
-        <hr>
-    </div>
-    <div>
-            <h2>機車保養</h2>
-            <table>
-                <tr style="background-color: #f0f0f0;">
-                    <td class="col-1">日期：</td>
-                    <td class="col-2"><input type="date" id="calendar_moto" name="calendar_moto"></td>
-                </tr>
-                <tr>
-                    <td class="col-1">Moto：</td>
-                    <td class="col-2"><select id="motocycle" name="motocycle">
-                            <option value="NVD-2806">NVD-2806</option>
-                            <option value="MLW-069" selected>MLW-069</option>
-                            <option value="322-DYC">322-DYC</option>
-                            <option value="NUM-072">NUM-072</option>
-                        </select></td>
-                </tr>
-                <tr style="background-color: #f0f0f0;">
-                    <td class="col-1">里程數：</td>
-                    <td class="col-2"><input type="number" id="km" name="km" min="0" onclick="this.value = '' "
-                            required> km</td>
-                </tr>
-                <tr>
-                    <td class="col-1">加油：</td>
-                    <td class="col-2"><label for="oil"><input type="checkbox" id="oil" name="oil" value="加油">加油</label>
-                    </td>
-
-                </tr>
-                <tr style="background-color: #f0f0f0;">
-                    <td class="col-1">更換：</td>
-                    <td class="col-2"><label for="engine_oil"><input type="checkbox" id="engine_oil" name="engine_oil"
-                                value="機油">機油</label></td>
-                </tr>
-                <tr style="background-color: #f0f0f0;">
-                    <td class="col-1"></td>
-                    <td class="col-2"><label for="gear_oil"><input type="checkbox" id="gear_oil" name="gear_oil"
-                                value="齒輪油">齒輪油</label></td>
-                </tr>
-                <tr style="background-color: #f0f0f0;">
-                    <td class="col-1"></td>
-                    <td class="col-2"><label for="other_parts"><input type="checkbox" id="other_parts"
-                                name="other_parts" value="其他零件">其他零件</label>
-                        <input type="text" id="other_parts_name" name="other_parts_name" autocomplete="on"
-                            style="display:none"></td>
-                </tr>
-                <tr>
-                    <td class="col-1">備註：</td>
-                    <td class="col-2"><input type="text" id="memo_moto" name="memo_moto" autocomplete="on"
-                            onclick="this.value = '' "></td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;padding: 10px;" colspan="2"><button id="saveValues_moto"
-                            onclick="saveValues_moto()">寫入Google表單_moto</button></td>
-                </tr>
-            </table>
-    </div>
-    <div id="version">
-        <p id="version">ver.20200924-4</p>
-        <hr>
-    </div>
-    <script>
-        const element = document.querySelector('#other_parts');
-        element.addEventListener('click', function () {
-            if ($('#other_parts').prop('checked')) {
-                $('#other_parts_name').show();
-            } else {
-                $('#other_parts_name').hide();
-            }
-        });
-    </script>
-    <div id="superLottotickets">
-        <p>威力彩建議(1,000,000次隨機)
-        </p>
-    </div>
-    <div id="firstZone">第一區：</div>
-    <div id="secondZone">第二區：</div>
-
-      <button onclick="reloadNumbers()">Reload</button>
-
-  <script>
-    function getRandomNumbers(min, max, count) {
-      const numbers = [];
-      while (numbers.length < count) {
-        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-        if (!numbers.includes(randomNum)) {
-          numbers.push(randomNum);
-        }
-      }
-      return numbers.sort((a, b) => a - b);
-    }
-
-    function countOccurrences(arr) {
-      const counts = {};
-      arr.forEach(num => {
-        counts[num] = (counts[num] || 0) + 1;
-      });
-      return counts;
-    }
-
-    function reloadNumbers() {
-      const firstZoneElement = document.getElementById('firstZone');
-      const secondZoneElement = document.getElementById('secondZone');
-
-      // 清除上一次的數字
-      firstZoneElement.textContent = '第一區：';
-      secondZoneElement.textContent = '第二區：';
-
-      // 進行1000次循環，統計每個號碼出現的次數
-      const firstZoneCounts = {};
-      const secondZoneCounts = {};
-      for (let i = 0; i < 1000000; i++) {
-        const firstZoneNumbers = getRandomNumbers(1, 38, 6);
-        const secondZoneNumber = getRandomNumbers(1, 8, 1)[0];
-
-        firstZoneNumbers.forEach(num => {
-          firstZoneCounts[num] = (firstZoneCounts[num] || 0) + 1;
-        });
-
-        secondZoneCounts[secondZoneNumber] = (secondZoneCounts[secondZoneNumber] || 0) + 1;
-      }
-
-      // 找出第一區出現次數最多的前6個數字
-      const sortedFirstZone = Object.keys(firstZoneCounts).sort((a, b) => firstZoneCounts[b] - firstZoneCounts[a]).slice(0, 6);
-      firstZoneElement.textContent += sortedFirstZone.join(', ');
-
-      // 找出第二區出現次數最多的1個數字
-      const sortedSecondZone = Object.keys(secondZoneCounts).sort((a, b) => secondZoneCounts[b] - secondZoneCounts[a])[0];
-      secondZoneElement.textContent += sortedSecondZone;
-    }
-
-    // 初始載入時呼叫一次
-    reloadNumbers();
-  </script>
-        <div><hr></div>
-      <div id="lotteryNumbers">大樂透建議(1,000,000次隨機)：</div>
-  <button onclick="reloadLotteryNumbers()">Reload</button>
-
-  <script>
-    function getRandomNumbers(min, max, count) {
-      const numbers = [];
-      while (numbers.length < count) {
-        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-        if (!numbers.includes(randomNum)) {
-          numbers.push(randomNum);
-        }
-      }
-      return numbers.sort((a, b) => a - b);
-    }
-
-    function countOccurrences(arr) {
-      const counts = {};
-      arr.forEach(num => {
-        counts[num] = (counts[num] || 0) + 1;
-      });
-      return counts;
-    }
-
-    function reloadLotteryNumbers() {
-      const lotteryNumbersElement = document.getElementById('lotteryNumbers');
-
-      // 清除上一次的數字
-      lotteryNumbersElement.textContent = '大樂透建議(1,000,000次隨機)：';
-
-      // 進行1000次循環，統計每組號碼出現的次數
-      const allNumbers = [];
-      for (let i = 0; i < 1000000; i++) {
-        const lotteryNumbers = getRandomNumbers(1, 49, 6);
-        allNumbers.push(...lotteryNumbers);
-      }
-
-      // 找出所有號碼出現次數
-      const numberCounts = countOccurrences(allNumbers);
-
-      // 找出出現次數最多的6個數字
-      const sortedNumbers = Object.keys(numberCounts).sort((a, b) => numberCounts[b] - numberCounts[a]).slice(0, 6);
-
-      lotteryNumbersElement.textContent += sortedNumbers.join(', ');
-    }
-
-    // 初始載入時呼叫一次
-    reloadLotteryNumbers();
-  </script>
-</body>
-
-</html>
+                <option value="日用品">日用品</option
