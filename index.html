@@ -44,30 +44,50 @@
     </style>
     <script>
        $.ajax({
-        url: "https://data.lass-net.org/data/last.php?device_id=74DA38E69D1C",
-        dataType: "json",
-        success: function (data) {
-            // 確保有抓到 feeds 資料
-            if (data && data.feeds && data.feeds.length > 0) {
-                let e = data.feeds[0];
-                let a = (new Date()).toLocaleDateString();
-                let o = (new Date()).toLocaleTimeString();
-
-                // 修正：直接讀取屬性，不再透過 .AirBox
-                // 提示：LASS API 中，'s_t0' 通常是溫度，'s_d0' 是 PM2.5
-                // 如果 API 有回傳 site 或是 device_id，可以直接顯示
+    // 關鍵：從 Location 往回抓 Things，並取得最新的觀測值 (Observations)
+    url: "https://sta.ci.taiwan.gov.tw/STA_AirQuality_v2/v1.0/Locations(72)/Things?$expand=Datastreams($expand=Observations($orderby=phenomenonTime desc;$top=1))",
+    dataType: "json",
+    success: function (data) {
+        if (data.value && data.value.length > 0) {
+            // 取得該位置的第一個設備 (Thing)
+            let thing = data.value[0]; 
+            let datastreams = thing.Datastreams;
             
-                $("#site").html(e.device_id || "未知站點");  // 或是顯示 ID
-                $("#time").html(a + " " + o);
-                $("#temp").html(e.s_t0 + " °C");            // e.s_t0 是溫度的標準欄位名
-            } else {
-                console.error("API 回傳格式不正確或無資料");
-            }
-        },
-        error: function(err) {
-            console.error("AJAX 請求失敗:", err);
+            let temp = "--";
+            let pm25 = "--";
+            let updateTime = "";
+
+            // 遍歷所有感測項目
+            datastreams.forEach(ds => {
+                if (ds.Observations && ds.Observations.length > 0) {
+                    let latestObs = ds.Observations[0];
+                    
+                    // 根據感測項目名稱儲存數值
+                    if (ds.name === "Temperature") {
+                        temp = latestObs.result;
+                        updateTime = latestObs.phenomenonTime; // 以溫度更新時間為基準
+                    }
+                    if (ds.name === "PM2.5") {
+                        pm25 = latestObs.result;
+                    }
+                }
+            });
+
+            // 顯示到網頁上
+            $("#site").html(thing.properties.stationName || "南投市監測站");
+            $("#time").html(new Date(updateTime).toLocaleString());
+            $("#temp").html(temp + " °C");
+            // 如果你有 PM2.5 的欄位
+            $("#pm25").html(pm25); 
+
+        } else {
+            $("#site").html("目前無資料");
         }
-    });
+    },
+    error: function () {
+        $("#site").html("API 連線失敗");
+    }
+});
 
         // 每 10 分鐘自動重新整理頁面
         setTimeout(function () { location.reload(); }, 6e5);
