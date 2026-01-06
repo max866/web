@@ -42,124 +42,107 @@
             line-height: 0px;
         }
     </style>
-   <script>
-    // --- 1. 抓取空氣盒子資料 (南投國中 NTJH) ---
-    $.ajax({
-        url: "https://data.lass-net.org/data/last.php?device_id=74DA38C7D236",
-        dataType: "json",
-        success: function (data) {
-            if (data && data.feeds && data.feeds.length > 0) {
-                let e = data.feeds[0];
-                
-                // 格式化時間 (API 回傳的是 ISO 格式)
-                let obsDate = new Date(e.timestamp).toLocaleString();
-                
-                // 取得數值 (s_t0: 溫度, s_d0: PM2.5)
-                let temp = e.s_t0 !== undefined ? e.s_t0 : "--";
-                let pm25 = e.s_d0 !== undefined ? e.s_d0 : "--";
+    <script>
+       $.ajax({
+          url: "https://data.lass-net.org/data/last.php?device_id=74DA38E69D1C",
+          dataType: "json",
+          success: function (data) {
+            let e = data.feeds[0],
+            a = (new Date).toLocaleDateString(),
+            o = (new Date).toLocaleTimeString();
 
-                $("#site").html("南投國中 (NTJH)");
-                $("#time").html(obsDate);
-                $("#temp").html(temp);
-                // 如果 HTML 中有 pm25 欄位則填入
-                if($("#pm25").length) $("#pm25").html(pm25);
-            } else {
-                $("#site").html("南投國中站台離線中");
-            }
-        },
-        error: function () {
-            $("#site").html("連線 LASS 失敗");
-        }
-    });
+            $("#site").html(e.AirBox.name);      // 顯示站點名稱
+            $("#time").html(a + " " + o);        // 顯示目前日期與時間
+            $("#temp").html(e.AirBox.temp);      // 顯示溫度或感測值
+              }
+        });
 
-    // --- 2. 初始化頁面設定 (日期與自動整理) ---
-    $(document).ready(function() {
-        // 設定今天的日期
-        var now = new Date();
-        var today = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
-        $('#calendar').val(today);
-        $('#calendar_moto').val(today);
-        
         // 每 10 分鐘自動重新整理頁面
-        setTimeout(function () { location.reload(); }, 600000);
-    });
-
-    // --- 3. Google Sheet 相關設定 ---
-    var appUrl = "https://script.google.com/macros/s/AKfycbznrcLiQ1opYZrgD2jadsxU66wDdRzhfR98GXb26njY1IwzDY9gUVP4V596hbAAyzvtNQ/exec";
-    var sheetsUrl = "https://docs.google.com/spreadsheets/d/1NzHDmTcM5IrTUMEaon16l6hTnDPQebnynZcMb50_aq8/edit?usp=sharing";
-
-    function reset() {
-        window.location.reload();
-    }
-
-    // --- 4. 記帳寫入功能 ---
-    function saveValues_account() {
-        var price = $('#price').val();
-        if (price) {
-            // 每次按下儲存時才抓取當下精確時間
-            var currentTimestamp = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
-            
-            var data = [[
-                currentTimestamp, 
-                $('#calendar').val(), 
-                $('#payfor').val(), 
-                $('#expenditure_type').val(), 
-                price, 
-                $('#content').val(), 
-                $('#memo').val(), 
-                $('#who').val()
-            ]];
-
+        setTimeout(function () { location.reload(); }, 6e5);
+        $.ajax({
+            success: function () {
+                var now = new Date();
+                var day = ("0" + now.getDate()).slice(-2);
+                var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                var today = now.getFullYear() + "-" + (month) + "-" + (day);
+                $('#calendar').val(today);
+                $('#calendar_moto').val(today);
+            }
+        });
+        //var appUrl = "https://script.google.com/macros/s/AKfycbzbBRDe-M_qG16v1GrRFuLTSAd-K9iJIBkrxBvg6loCIp5yb6cd/exec";
+        var appUrl = "https://script.google.com/macros/s/AKfycbznrcLiQ1opYZrgD2jadsxU66wDdRzhfR98GXb26njY1IwzDY9gUVP4V596hbAAyzvtNQ/exec";
+        //var appUrl = "https://script.google.com/macros/library/d/18zXbPQBxGBSgAhQR9dNISTZCfpevmP5eF87Pwta1iz-IzL20aFw9XuU5/7";
+        var sheetsUrl = "https://docs.google.com/spreadsheets/d/1NzHDmTcM5IrTUMEaon16l6hTnDPQebnynZcMb50_aq8/edit?usp=sharing";
+        var timestamp = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
+        var parameter = {};
+        function saveValues_account() {
+            var price = $('#price').val();
+            if (price) {
+                var calendar = $('#calendar'),
+                    payfor = $('#payfor'),
+                    expenditure_type = $('#expenditure_type'),
+                    content = $('#content'),
+                    memo = $('#memo');
+                    who = $('#who');
+                var data = [[timestamp, calendar.val(), payfor.val(), expenditure_type.val(), price, content.val(), memo.val(), who.val()]];
+                var parameter = {
+                    url: sheetsUrl,
+                    name: 'expenditure',
+                    data: data.toString(),
+                    row: data.length,
+                    column: data[0].length,
+                    insertType: 'bottom'
+                };
+                $.get(appUrl, parameter);
+                setTimeout("reset()", 1000);
+                $('#price').val('');
+                $('#content').val('');
+                $('#memo').val('');
+                $('#who').val('');
+            }
+        }
+        function reset() {
+            window.location.reload();
+        }
+        function saveValues_moto() {
+            if($('#oil').prop("checked")){
+                var oil = 'v'
+            }else{
+                var oil = ''
+            }
+            if($('#engine_oil').prop("checked")){
+                var engine_oil = 'v'
+            }else{
+                var engine_oil = ''
+            }
+            if($('#gear_oil').prop("checked")){
+                var gear_oil = 'v'
+            }else{
+                var gear_oil = ''
+            }
+            if($('#other_parts').prop("checked")){
+                var other_parts = 'v'
+            }else{
+                var other_parts = ''
+            }
+            var calendar_moto = $('#calendar_moto'),
+                motocycle = $('#motocycle'),
+                km = $('#km'),
+                other_parts_name = $('#other_parts_name'),
+                memo_moto = $('#memo_moto');
+            var data = [[timestamp, calendar_moto.val(), motocycle.val(), km.val(), oil, engine_oil, gear_oil, other_parts_name.val(), memo_moto.val()]];
             var parameter = {
                 url: sheetsUrl,
-                name: 'expenditure',
+                name: 'moto',
                 data: data.toString(),
                 row: data.length,
                 column: data[0].length,
                 insertType: 'bottom'
-            };
-            
+            }
             $.get(appUrl, parameter);
-            alert("記帳資料已送出");
-            setTimeout(reset, 1000);
+            setTimeout("reset()", 1000);
         }
-    }
-
-    // --- 5. 機車保養寫入功能 ---
-    function saveValues_moto() {
-        var currentTimestamp = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
-        
-        var oil = $('#oil').prop("checked") ? 'v' : '';
-        var engine_oil = $('#engine_oil').prop("checked") ? 'v' : '';
-        var gear_oil = $('#gear_oil').prop("checked") ? 'v' : '';
-        var other_parts = $('#other_parts').prop("checked") ? 'v' : '';
-
-        var data = [[
-            currentTimestamp, 
-            $('#calendar_moto').val(), 
-            $('#motocycle').val(), 
-            $('#km').val(), 
-            oil, 
-            engine_oil, 
-            gear_oil, 
-            $('#other_parts_name').val(), 
-            $('#memo_moto').val()
-        ]];
-
-        var parameter = {
-            url: sheetsUrl,
-            name: 'moto',
-            data: data.toString(),
-            row: data.length,
-            column: data[0].length,
-            insertType: 'bottom'
-        };
-
-        $.get(appUrl, parameter);
-        alert("機車保養資料已送出");
-        setTimeout(reset, 1000);
-    }
-</script>
+    </script>
 </head>
 
 <body>
