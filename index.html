@@ -43,54 +43,21 @@
         }
     </style>
     <script>
-       // $.ajax({
-       //    //url: "https://data.lass-net.org/data/last.php?device_id=74DA38E69D1C",
-       //    url: "https://data.lass-net.org/data/last.php?device_id=74DA38C7D236",
-       //    dataType: "json",
-       //    success: function (data) {
-       //      let e = data.feeds[0],
-       //      a = (new Date).toLocaleDateString(),
-       //      o = (new Date).toLocaleTimeString();
+       $.ajax({
+          //url: "https://data.lass-net.org/data/last.php?device_id=74DA38E69D1C",
+          url: "https://data.lass-net.org/data/last.php?device_id=74DA38C7D236",
+          dataType: "json",
+          success: function (data) {
+            let e = data.feeds[0],
+            a = (new Date).toLocaleDateString(),
+            o = (new Date).toLocaleTimeString();
 
-       //      $("#site").html(e.AirBox.name);      // 顯示站點名稱
-       //      $("#time").html(a + " " + o);        // 顯示目前日期與時間
-       //      $("#temp").html(e.AirBox.temp);      // 顯示溫度或感測值
-       //        }
-       //  });
-$.ajax({
-    // 使用環境部物聯網 API (南投市南投縣政府附近站點)
-    url: "https://sta.ci.taiwan.gov.tw/STA_AirQuality_v2/v1.0/Things?$filter=name%20eq%20'南投縣南投市微型感測器-10336214300'&$expand=Datastreams($expand=Observations($orderby=phenomenonTime%20desc;$top=1))",
-    dataType: "json",
-    success: function (data) {
-        if (data.value && data.value.length > 0) {
-            let thing = data.value[0];
-            let datastreams = thing.Datastreams;
-            let temp = "--", pm25 = "--", updateTime = "";
+            $("#site").html(e.AirBox.name);      // 顯示站點名稱
+            $("#time").html(a + " " + o);        // 顯示目前日期與時間
+            $("#temp").html(e.AirBox.temp);      // 顯示溫度或感測值
+              }
+        });
 
-            // 從資料流中抽取出數值
-            datastreams.forEach(ds => {
-                if (ds.Observations && ds.Observations.length > 0) {
-                    let obs = ds.Observations[0];
-                    if (ds.name === "Temperature") temp = obs.result;
-                    if (ds.name === "PM2.5") pm25 = obs.result;
-                    updateTime = obs.phenomenonTime; // 取得最後更新時間
-                }
-            });
-
-            $("#site").html("南投市中心測站 (政府官測)");
-            $("#time").html(new Date(updateTime).toLocaleString());
-            $("#temp").html(temp);
-            if($("#pm25").length) $("#pm25").html(pm25);
-
-        } else {
-            $("#site").html("政府 API 維護中");
-        }
-    },
-    error: function () {
-        // 如果 HTTPS 憑證報錯，會執行到這裡
-        $("#site").html("API 連線受阻 (請檢查憑證)");
-    }
-});
         // 每 10 分鐘自動重新整理頁面
         setTimeout(function () { location.reload(); }, 6e5);
         $.ajax({
